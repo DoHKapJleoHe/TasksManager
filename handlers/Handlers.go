@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 func GetTasks(ctx *gin.Context) {
@@ -26,6 +27,12 @@ func CreateTask(ctx *gin.Context) {
 	db.DB.CreateTAsk(newTask, ctx)
 }
 
-func DeleteTask(id int) {
+func DeleteTask(ctx *gin.Context) {
+	id := ctx.Param("id")
+	idInt, err := strconv.Atoi(id)
 
+	if err != nil {
+		ctx.IndentedJSON(http.StatusBadRequest, nil)
+	}
+	db.DB.DeleteTask(idInt, ctx)
 }
